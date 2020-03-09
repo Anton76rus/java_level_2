@@ -4,26 +4,28 @@ import java.awt.*;
 
 public class Background {
 
-    private int sleepTurn = 0;
-    private Color color = new Color((int)(Math.random() * 255),
-                                    (int)(Math.random() * 255),
-                                    (int)(Math.random() * 255));
+    private int x = 0;
+    private int y = 0;
+    private int z = 0;
+    private float vx = (int) ((Math.random() * 200));
+    private float vy = (int) ((Math.random() * 200));
+    private float vz = (int) ((Math.random() * 200));
+    private Color color = new Color(0,0,0);
 
-     Background(){
+    Background() {
     }
 
-    void update(float deltaTime,Sprite [] sprites){
-         if (sleepTurn == 60) {
-             color = new Color((int) (Math.random() * (deltaTime * 10000)),
-                     (int) (Math.random() * (deltaTime * 10000)),
-                     (int) (Math.random() * (deltaTime * 10000)));
-         }
+    void update(float deltaTime, Sprite[] sprites) {
+        if ((x + vx * deltaTime) > 255 || (x + vx * deltaTime) < 0) vx = -vx;
+        if ((y + vy * deltaTime) > 255 || (y + vy * deltaTime) < 0) vy = -vy;
+        if ((z + vz * deltaTime) > 255 || (z + vz * deltaTime) < 0) vz = -vz;
+        x += vx * deltaTime;
+        y += vy * deltaTime;
+        z += vz * deltaTime;
+        color = new Color(x, y, z);
     }
 
-    void render(GameCanvas canvas){
-         if (sleepTurn == 60){
-             canvas.setBackground(color);
-             sleepTurn = 0;
-         }else sleepTurn++;
+    void render(GameCanvas canvas) {
+        canvas.setBackground(color);
     }
 }
