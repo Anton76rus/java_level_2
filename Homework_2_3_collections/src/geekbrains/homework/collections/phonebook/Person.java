@@ -6,14 +6,14 @@ import java.util.Arrays;
 public class Person {
 
     private String email;
-    private ArrayList <String> listPhoneNumbers;
+    private ArrayList<String> listPhoneNumbers;
 
     public Person(String email, String phoneNumbers) {
         this.email = email;
         listPhoneNumbers = putPhoneNumber(phoneNumbers);
     }
 
-    private ArrayList<String> putPhoneNumber(String strNumber){
+    private ArrayList<String> putPhoneNumber(String strNumber) {
         return new ArrayList<>(Arrays.asList(strNumber.split(" ")));
     }
 

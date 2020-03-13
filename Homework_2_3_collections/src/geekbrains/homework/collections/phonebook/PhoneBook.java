@@ -10,10 +10,13 @@ public class PhoneBook {
     Scanner scanner = new Scanner(System.in);
 
     void putPerson(String lastName, String email, String numberPhone) {
+        //Я тут решил сделать выбор перезаписывать ли данные,если ключ совпадает,или оставить как есть
         if (phoneBook.containsKey(lastName)) {
+
             System.out.println("A person with last name " + lastName + " already exist." +
                     "\nDo you want to overwrite the data for this last name?" +
                     "\n\nEnter \"yes\" to overwrite or \"no\" to exit");
+
             String reply;
             do {
                 reply = scanner.nextLine();
@@ -33,6 +36,7 @@ public class PhoneBook {
         phoneBook.put(lastName, new Person(email, numberPhone));
     }
 
+    //Как я понял Main должен только за рычаги дёргать,роэтому распечатывать красиво данные PhoneBook заставил
     void printPhoneNumbers(String lastName) {
         System.out.println(lastName + " has following phone numbers - "
                 + getPhoneNumbers(lastName));
@@ -43,6 +47,12 @@ public class PhoneBook {
                 + getEmail(lastName));
     }
 
+    public void info() {
+        phoneBook.forEach((s, person) -> {
+            System.out.println("Surname - " + s + "," + person.toString());
+        });
+    }
+
     String getEmail(String lastName) {
         return phoneBook.get(lastName).getEmail();
     }
@@ -51,9 +61,4 @@ public class PhoneBook {
         return phoneBook.get(lastName).getListPhoneNumbers();
     }
 
-    public void info() {
-        phoneBook.forEach((s, person) -> {
-            System.out.println("Surname - " + s + "," + person.toString());
-        });
-    }
 }
