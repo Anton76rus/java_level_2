@@ -1,8 +1,13 @@
 package geekbrains.lesson4.client;
 
+import geekbrains.lesson4.server.core.ChatServer;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
 
 public class ClientGUI extends JFrame implements ActionListener, Thread.UncaughtExceptionHandler, KeyListener {
 
@@ -44,6 +49,8 @@ public class ClientGUI extends JFrame implements ActionListener, Thread.Uncaught
                 "user_with_an_exceptionally_long_name_in_this_chat"};
         userList.setListData(users);
         log.setEditable(false);
+        tfIPAddress.setEditable(false);
+        tfPort.setEditable(false);
         JScrollPane scrollLog = new JScrollPane(log);
         JScrollPane scrollUsers = new JScrollPane(userList);
         scrollUsers.setPreferredSize(new Dimension(100, 0));
@@ -76,8 +83,10 @@ public class ClientGUI extends JFrame implements ActionListener, Thread.Uncaught
         if (src == cbAlwaysOnTop) {
             setAlwaysOnTop(cbAlwaysOnTop.isSelected());
         } else if (src == btnSend && tfMessage != null) {
-            log.setText(log.getText() + "\n" + tfMessage.getText());
-            // Здесь будет вызываться метод writeChatMessageHistory из серверной части
+            log.append(log.getText() + "\n" + tfMessage.getText());
+            // Здесь сообщения будут как то отправляться на сервер
+            // Ну а пока запишу здесь
+            printHistory();
             tfMessage.setText(null);
         } else
             throw new RuntimeException("Unknown source: " + src);
@@ -103,14 +112,25 @@ public class ClientGUI extends JFrame implements ActionListener, Thread.Uncaught
     public void keyPressed(KeyEvent e) {
         int key = e.getKeyCode();
         if (key == KeyEvent.VK_ENTER && tfMessage != null) {
-            log.setText(log.getText() + "\n" + tfMessage.getText());
-            // Здесь будет вызываться метод writeChatMessageHistory из серверной части
+            log.append(log.getText() + "\n" + tfMessage.getText());
+            // И здесь
+            printHistory();
             tfMessage.setText(null);
         }
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
+    }
+
+    private void printHistory() {
+        try {
+            PrintStream ps = new PrintStream(new FileOutputStream("ChatHistory.txt", true));
+            ps.println(tfMessage.getText());
+            ps.close();
+        } catch (FileNotFoundException ex) {
+            throw new RuntimeException(ex);
+        }
     }
 
 }
